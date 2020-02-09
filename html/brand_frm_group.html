@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <style>
+        img.icon {
+            display: block;
+            margin: 0 auto;
+            width: 50px;
+            height: 50px;
+        }
+
+        .aui-div-radis {
+            border: 1px solid #FFF0F5;
+            border-radius: 50%;
+            padding: 10px;
+            width: 90%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="aui-content aui-margin-b-15">
+        <div class="aui-grid aui-margin-0 aui-padded-5" id="div_goods_list">
+        </div>
+    </section>
+    <div class="index_loading">
+        <img src="../image/loading_main.gif" />
+        <span>加载中,请稍后...</span>
+    </div>
+    <script id="tmpl_goods_list" type="text/x-dot-template">
+        {{? it.length>0}} {{for (var i=0; i
+        <it.length; i++) {}} <div class="aui-col-xs-3  aui-border" tapmode onclick="openWinto('brand_goods_list','coupon_head',{ name:'{{=it[i].fq_brand_name}}',url:'widget://html/brand_goods_list.html',brandid:'{{=it[i].id}}' })">
+            <div class="aui-div-radis">
+                <img src='../image/taobao.png' data-echo="{{=it[i].brand_logo}}" class="icon" onerror="this.src='../image/taobao.png'">
+                <h5 class="aui-ellipsis-1 samll"><small>{{=it[i].fq_brand_name}}</small></h5>
+            </div>
+            </div>
+            {{ } }} {{?}}
+    </script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        echo.init({
+            offset: 50
+        });
+        api.parseTapmode();
+        sorts_data.min_id = 1;
+        getGoodsList('brand', {
+            min_id: sorts_data.min_id,
+            brandcat: api.pageParam.brandcat
+        });
+        getMoreGoods(getGoodsList('brand', {
+            min_id: sorts_data.min_id,
+            brandcat: api.pageParam.brandcat
+        }, function() {
+            imageCache($('.icon'));
+        }, true));
+    };
+</script>
+
+</html>

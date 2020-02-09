@@ -1,0 +1,337 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/swiper.min.css" />
+    <style>
+        .aui-bar-nav {
+            background-color: rgba(0, 0, 0, 0.0);
+            color: #333;
+        }
+
+        .topfixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
+
+        .aui-bg-737373 {
+            background-color: #737373;
+        }
+
+        .aui-title span {
+            margin-left: 10px;
+        }
+
+        .aui-title .active {
+            border-bottom: 3px solid #CD2626;
+        }
+
+        .aui-text-color-CD2626 {
+            color: #CD2626 !important;
+            font-weight: bolder;
+            font-size: 1.1rem;
+        }
+
+        .aui-bg-quan {
+            background-image: url('../image/bg1.png');
+            height: 25px;
+            line-height: 25px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: top left;
+            border-radius: 3px;
+            float: right;
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .coupon-bg_t {
+            width: 100%;
+            height: 90px;
+            background: #FFFFFF url(../image/yhq1.png) no-repeat center center;
+            background-size: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+            line-height: 90px;
+            text-align: center;
+        }
+
+        .aui-coupon {
+            font-size: 20px;
+            height: 60px;
+            width: 70%;
+            color: #fff;
+            text-align: center;
+            vertical-align: bottom;
+        }
+
+        .aui-time {
+            height: 30px;
+            width: 70%;
+            float: left;
+            text-align: center;
+            font-size: 12px;
+            color: #fff;
+            line-height: 20px;
+        }
+
+        .aui-bg-EE30A7 {
+            color: #EE1289;
+            border: 1px solid #EE1289;
+            font-size: 14px;
+            border-radius: 2px;
+            padding: 0 2px;
+            font-family: sans-serif;
+        }
+
+        #tuijian {
+            border-top: 5px solid #EDEDED;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        #tuijian img {
+            border-radius: 5px;
+        }
+
+        #goodpics {
+            border-top: 5px solid #ededed;
+        }
+
+        .swiper-pagination-bullet-active {
+            color: #fff;
+            background: #FF1493;
+        }
+
+        .bgimg {
+            width: 100%;
+            background: url(../image/loads.gif) no-repeat center center;
+            background-size: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="aui-bar aui-bar-nav  topfixed" id="aui-header">
+        <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
+            <span id="aui-icon-left" class="aui-iconfont aui-icon-left" style="background-color:#737373;width:28px;height:28px;border-radius:50%;-webkit-border-radius:50%;border:1px solid #666"></span>
+        </a>
+        <div class="aui-title" id="aui-title" style="display:none">
+            <span class="active" id="sp" tapmode onclick="goto('gooddetail')">商品</span>
+            <span id="xq" tapmode onclick="goto('goodpics')">详情</span>
+            <span id="tj" tapmode onclick="goto('tuijian')">推荐</span>
+        </div>
+        <a class="aui-pull-right aui-btn" tapmode onclick="">
+            <span id="aui-like" class="aui-iconfont aui-icon-like aui-bg-737373" style="color:#fff;width:28px;height:28px;border-radius:50%;-webkit-border-radius:50%;border:1px solid #666"></span>
+        </a>
+    </header>
+    <section class="aui-card-list" id="gooddetail">
+    </section>
+    <div class="aui-clearfix"></div>
+    <section class="aui-content " id="tuijian">
+        <div class="aui-iconfont aui-icon-like aui-text-color-CD2626 aui-font-size-16 aui-margin-auto aui-padded-t-10 aui-text-center">猜你喜欢</div>
+        <div id="tuijiangoods">
+        </div>
+    </section>
+    <footer class="aui-bar aui-bar-tab" id="footer">
+        <div id="share_money" class="aui-bar-tab-item aui-bg-tag-quan aui-text-white" tapmode style="width: auto;">优惠券</div>
+        <div id="buy_money" class="aui-bar-tab-item aui-bg-tag-money aui-text-white" tapmode style="width: auto;" onclick="openCoupon()">立即领取</div>
+    </footer>
+    <script id="gooddetailtmpl" type="text/x-dot-template">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {{for (var i=0;i
+                <(it.taobao_image).length;i++) { }} <div class="swiper-slide"><img class="bgimg" onerror="this.src='../image/load-img.png'" src="{{=it.taobao_image[i]}}" height="{{!(api.winHeight/2+50)}}px" width="100%" /></div>
+            {{ } }}
+        </div>
+        <div class="swiper-pagination"></div>
+        </div>
+        <div style="margin:0 5px">
+            <h3 class="aui-ellipsis-2 aui-margin-t-10"><label class="tb_font_style">{{? it.shoptype=="B"}}天猫{{??}}淘宝{{?}}</label><b>{{=it.itemtitle}}</b></h3>
+            <div><span class="aui-text-color-CD2626"><label class="aui-font-size-14">￥</label>{{=it.itemendprice}}<del class="aui-font-size-12 aui-text-dark">￥{{=it.itemprice}}</del></span><span class="aui-text-white aui-font-size-12 aui-margin-r-5 aui-bg-quan">{{=it.itemsale}}人购买</span></div>
+            <div class="aui-clearfix"></div>
+        </div>
+
+        <div id="coupon" tapmode onclick="openCoupon()">
+            <div class="aui-content" style="padding:5px 15px;">
+                <div class="coupon-bg_t">
+                    <div class="aui-coupon">{{=it.couponmoney}}元优惠券</div>
+                    <div class="aui-time">使用期限:{{=it.couponstarttime}}-{{=it.couponendtime}}</div>
+                </div>
+                {{? it.guide_article }}
+                <p class="aui-font-size-12 aui-margin-t-10">{{=it.guide_article}}</p>
+                {{?? it.itemdesc}}
+                <p class="aui-font-size-12 aui-margin-t-10">{{=it.itemdesc}}</p>
+                {{?}}
+            </div>
+        </div>
+        <div class="goodpics" id="goodpics">
+            <div class="aui-text-center aui-margin-t-10 aui-margin-b-10" tapmode onclick="getTaoBaoDetail(gooditem.itemid,'gooddetail_pic');"><b id="tabtxt">点击查看完整图文详情</b></div>
+            <div class="gooddetail_pic">
+                {{? it.itempic_copy}}
+                <img class="bgimg" src="http://img.haodanku.com/{{=it.itempic_copy}}-600" width="100%" onerror="this.src='../image/load-img.png'" /> {{?}} {{for (var i=0;i
+                <(it.taobao_image).length;i++) { }} <img src="{{=it.taobao_image[i]}}" width="100%" class="bgimg" onerror="this.src='../image/load-img.png'" /> {{ } }}
+            </div>
+
+        </div>
+    </script>
+    <script id="tuijiangoodtmpl" type="text/x-dot-template">
+        {{for (var i=0;i
+        <it.length;i++){ }} <div height="100%" tapmode onclick="openWinto('detail_win','./good_detail_win',{gooditem:'{{!JSON.stringify(it[i])}}'})">
+            <div class="aui-flex-col aui-flex-center aui-border-tb">
+                <div class="aui-flex-item-4  aui-flex-middle aui-padded-10">
+                    <img src="{{=it[i].itempic}}_310x310.jpg" onerror="this.src='../image/load-img.png'" />
+                </div>
+                <div class="aui-flex-item-8 aui-flex-between aui-padded-10 aui-border-b">
+                    <h4 class="aui-ellipsis-2 aui-margin-t-5"><label class="tb_font_style">{{? it[i].shoptype=="B"}}天猫{{??}}淘宝{{?}}</label><b>{{=it[i].itemtitle}}</b></h4>
+                    <div><span class="aui-text-color-CD2626"><label class="aui-font-size-14">￥</label>{{=it[i].itemendprice}}<del class="aui-font-size-12 aui-text-dark">￥{{=it[i].itemprice}}</del></span><span class="aui-text-white aui-font-size-12 aui-margin-r-5 aui-bg-quan">预估赚￥{{=it[i].tkmoney}}</span></div>
+                    <span class="aui-text-danger aui-font-size-12 aui-pull-left aui-clearfix">券:{{=it[i].couponmoney}}元</span>
+                    <span class="aui-font-size-12 aui-text-dark aui-pull-right aui-margin-r-5">已售:{{=it[i].itemsale}}</span>
+                </div>
+            </div>
+            <div class="aui-clearfix">
+            </diV>
+            </div>
+            {{ } }}
+    </script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/swiper.min.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript">
+    var gooditem;
+    apiready = function() {
+        api.parseTapmode();
+        var header = $api.byId('aui-header');
+        $api.fixStatusBar(header);
+        var headerPos = $api.offset(header);
+        var body_h = $api.offset($api.dom('body')).h;
+        var footerH = $api.offset($api.byId('footer')).h;
+        gooditem = JSON.parse(api.pageParam.data.gooditem);
+        $api.text($api.byId('share_money'), '优惠券' + gooditem.couponmoney + '元');
+        if (gooditem.taobao_image == null) {
+            gooditem.taobao_image = gooditem.itempic;
+        }
+        gooditem.taobao_image = (gooditem.taobao_image).split(',');
+        if (!gooditem.activityid) {
+            var str = ((gooditem.couponurl) + 'end').match(/activityId=(\S*)end/);
+            gooditem.activityid = str[1];
+        }
+        var da = new Date(gooditem.couponstarttime * 1000);
+        var en = new Date(gooditem.couponendtime * 1000);
+        gooditem.couponstarttime = da.getFullYear() + '.' + parseInt(da.getMonth() + 1) + '.' + da.getDate();
+        gooditem.couponendtime = en.getFullYear() + '.' + parseInt(en.getMonth() + 1) + '.' + en.getDate();
+        getYouLike(gooditem.itemid);
+        setDotTmpl('gooddetailtmpl', 'gooddetail', gooditem);
+        var mySwiper = new Swiper('.swiper-container', {
+            loop: true, // 循环模式选项
+            autoplay: true,
+            lazy: true,
+            // 如果需要分页器
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        });
+
+        window.onscroll = function() {
+            var toph = document.documentElement.scrollTop || document.body.scrollTop;
+            var scrollTop = $api.byId('goodpics').offsetTop - toph;
+            var tuijianTop = $api.byId('tuijiangoods').offsetTop - toph;
+            if (toph > 1) {
+                api.setStatusBarStyle({
+                    style: 'dark'
+                });
+                $api.css($api.byId('aui-header'), 'color:#333 !important;background-color:#FFF;opacity:' + toph * 0.01);
+                $api.css($api.byId('aui-title'), 'color:#333 !important;display:block;opacity:' + toph * 0.01);
+                $api.css($api.byId('aui-like'), 'display:none');
+                $api.css($api.byId('aui-icon-left'), 'color:#333;background-color:rgba(0,0,0,0.0);border:none');
+            } else {
+                api.setStatusBarStyle({
+                    style: 'light'
+                });
+                $api.css($api.byId('aui-header'), 'background-color:rgba(0,0,0,0.0);opacity:1');
+                $api.css($api.byId('aui-title'), 'display:none');
+                $api.css($api.byId('aui-like'), 'display:block');
+                $api.css($api.byId('aui-icon-left'), 'color:#fff;background-color:#737373;width:28px;height:28px;border-radius:50%;-webkit-border-radius:50%;border:1px solid #666');
+            }
+            if (scrollTop < 100) {
+                $api.removeCls($api.dom($api.byId('aui-title'), ".active"), 'active');
+                $api.addCls($api.byId("xq"), 'active');
+            } else if (scrollTop > 100) {
+                $api.removeCls($api.dom($api.byId('aui-title'), ".active"), 'active');
+                $api.addCls($api.byId("sp"), 'active');
+            }
+            if (tuijianTop < 100) {
+                $api.removeCls($api.dom($api.byId('aui-title'), ".active"), 'active');
+                $api.addCls($api.byId("tj"), 'active');
+            }
+        }
+
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            closeWin();
+        });
+
+    };
+
+    function closeWin() {
+        api.closeWin({});
+        window.setTimeout(function() {
+            api.setStatusBarStyle({
+                style: 'light'
+            });
+        }, 300);
+
+    }
+
+    function getYouLike(itemid) {
+        postData(
+            API_URL_GOODS, {
+                apiname: 'get_similar_info',
+                itemid: itemid
+            },
+            function(ret, err) {
+                if (ret && ret.code == 1) {
+                    setDotTmpl("tuijiangoodtmpl", "tuijiangoods", ret.data);
+                } else {
+
+                }
+            });
+
+    }
+
+    function goto(where) {
+        document.getElementById(where).scrollIntoView();
+    }
+
+    function openCoupon() {
+        showProgress('优惠券生成中...');
+        postData(API_URL_FUN, {
+            apiname: 'getGyUrl',
+            itemid: gooditem.itemid,
+            activityId: gooditem.activityid
+        }, function(ret) {
+            if (ret) {
+                hideProgress();
+                openWinto("taobaogoods_win", "common_head", {
+                    'name': '粉丝福利购',
+                    'url': ret.coupon_click_url
+                });
+            } else {
+                openUrlX5(gooditem.activityid, gooditem.itemid);
+            }
+        });
+    }
+</script>
+
+</html>

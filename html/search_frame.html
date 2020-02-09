@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>title</title>
+	<link rel="stylesheet" type="text/css" href="../css/aui.css" />
+	<link rel="stylesheet" type="text/css" href="../css/common.css" />
+	<style type="text/css">
+		.bgimg {
+			width: 60px;
+			height: 180px;
+			max-height: 180px;
+			background: url(../image/loads.gif) no-repeat center center;
+			background-size: contain;
+		}
+		.goods-item {
+			border: 1px solid #eee;
+			text-align: center;
+			padding: 3px;
+			padding-bottom: 8px;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- 顶部搜索框 -->
+	<div class="s_header">
+		<div class="publictopSearchBox">
+			<div class="publictopSearchBox_1 ">
+				<div class="close_btn" onclick="api.closeWin();">
+					<img src="../image/back_01.png">
+				</div>
+				<div class="searchBox">
+					<div class="publicsearch top_search">
+						<form action="javascript:return true">
+							<img src="../image/search_icon.png" id="search_icon">
+							<img src="../image/close_btn.png" id="close_btn" style="display:none">
+							<input type="search" placeholder='请输入要搜索的关键字' confirm-type="search" class="fl publicFont_1 searchkey top_search_txt">
+							</input>
+						</form>
+						<div class='clearfix'></div>
+					</div>
+				</div>
+				<div class="fr rightsearchbutton">
+					<text bindtap='searchForGoods' class="searchForGoods">
+						搜索
+					</text>
+				</div>
+				<div class='clearfix'></div>
+			</div>
+		</div>
+		<div class="search_list" id="source_type">
+		</div>
+	</div>
+	<div class="search_stance"></div>
+	<!-- 商品排序筛选 -->
+	<div class="nav_top ui-row teamlist" id="sortby">
+		<ul id="sorttab">
+		</ul>
+	</div>
+	<!--商品列表-->
+	<div class="goodslist" id="div_goods_list">
+	</div>
+	<!--加载loading-->
+	<div class="index_loading">
+		<img src="../image/index_loading.gif" />
+		<span>加载中,请稍后...</span>
+	</div>
+	<div class="loading_main">
+		<img src="../image/loading_main.gif" />
+		<span>加载中,请稍后...</span>
+	</div>
+
+	<div class="temporarily_data" style="display:none;">
+		<img src="../image/no_date.png" />
+	</div>
+	<!--返回顶部-->
+	<div class="gotoback" onclick="gotoback()" id="gotoback" style="display:none;">
+		<img src="../image/gotoback.png">
+	</div>
+</body>
+
+</html>
+<script id="source_tmpl" type="text/x-dot-template">
+	{{ for(var i=0, catlen=it.length; i
+	<catlen; i++) {}} <div data-source_type="{{=it[i].value}}" class="search_list_item   {{=it[i].value}}">{{=it[i].name}}</div>
+		{{ }}}
+</script>
+<script id="sorttab-tmpl" type="text/x-dot-template">
+	{{ for(var i=0, catlen=it.length; i
+	<catlen; i++) {}} <li {{? i==0}} class="active" {{?}} data-sorttb="{{=it[i].name}}" data-sortby="{{=it[i].sort}}">
+		{{=it[i].name}}
+		</li>
+		{{ }}}
+</script>
+<script id="tmpl_goods_list" type="text/x-dot-template">
+{{? it.length>0}} {{for (var i=0 ;i
+<it.length; i++) {}} <div class="aui-col-xs-6" tapmode onclick="openWinto('detail_win','./good_detail_win',{gooditem:'{{!JSON.stringify(it[i])}}'})">
+	<div class="goods-item">
+		<img id="img_pics" onerror="this.src='../image/load-img.png'" src="../image/load-img.png" data-echo="{{=it[i].itempic}}_310x310.jpg" width="100%" height="210px" max-height="210px">
+		<div style="background-color:#FFEFD5;color:#FFF" class=" aui-font-size-14  aui-bg-tag-quan-{{? i%2==0}}0{{??}}1{{?}} "><label class=" aui-iconfont   aui-padded-r-5 aui-icon-{{? it[i].shoptype=='C'}}taobao aui-text-warning{{??}}tianmao aui-text-danger{{?}}"></label>累计销售{{=it[i].itemsale}}单</div>
+		<div class="aui-ellipsis-1">{{=it[i].itemtitle}}</div>
+		<div style="margin-top: 3px;font-size: 10px;">
+			<label class="aui-padded-l-5 aui-text-left aui-pull-left"><del>￥{{=it[i].itemprice}}元</del></label>
+			<label class="aui-padded-r-5 aui-text-right aui-pull-right">已售{{=it[i].itemsale}}</label>
+		</div>
+		<div class="aui-clearfix"></div>
+		<div style="margin-top: 3px;">
+			<span class="aui-pull-left aui-padded-l-5"><label class="aui-label aui-label-danger aui-bg-tag-quan">券{{=it[i].couponmoney}}元</label></span>
+			<span class="aui-pull-right aui-padded-r-5"><label class="aui-label aui-label-success aui-bg-tag-money">￥{{= it[i].itemendprice}}元</label></span>
+		</div>
+		<div class="aui-clearfix"></div>
+	</div>
+	<div class="aui-clearfix"></div>
+	</div>
+	{{ } }}
+	{{?}}
+</script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script>
+	var pageParam;
+	apiready = function() {
+		echo.init({
+			offset: 0, // 指定距离视窗上下左右位置图片预加载 Number|String Default: 0
+			throttle: 250, // 延迟加载  Number|String	Default: 250
+			unload: false
+		});
+		initPage();
+		bodySrollChangeHeader();
+		doGoodlistSort();
+		doSeaarch();
+		getMoreGoods(function(){
+			dogetGoodsList(true);
+		});
+	}
+
+	function initPage() {
+		pageParam = api.pageParam;
+		if (pageParam.data) {
+			pageParam = pageParam.data;
+		}
+		if(!pageParam.keyword){
+			pageParam.keyword='热销';
+		}
+		$('.top_search_txt').val(pageParam.keyword);
+		setDotTmpl('source_tmpl', 'source_type', Gtablist);
+		setDotTmpl('sorttab-tmpl', 'sorttab', Gsortlist);
+		$(".top_search_txt").focus(function() {
+			$(this).parent().children("#close_btn").show();
+			$("#search_icon").hide();
+		});
+		$(".top_search_txt").blur(function() {
+			if ($(this).val() == '') {
+				$(this).parent().children("#close_btn").hide();
+				$("#search_icon").show();
+			}
+		});
+		$("#close_btn").click(function() {
+			$(this).parent().find('.top_search_txt').val('');
+			$(this).hide();
+			$("#search_icon").show();
+		});
+		dogetGoodsList();
+	}
+	function doSeaarch() {
+		$('.searchForGoods').click(function() {
+			$("#goodslist").empty();
+			pageParam.keyword = $('.top_search_txt').val();
+			$(".temporarily_data").hide();
+			dogetGoodsList();
+		})
+		$(".top_search_txt").keydown(function(e) {
+			if (e.keyCode == 13) {
+				$("#goodslist").empty();
+				pageParam.keyword = $('.top_search_txt').val();
+				$(".temporarily_data").hide();
+			dogetGoodsList();
+			}
+		});
+	}
+
+	function dogetGoodsList(more) {
+		getGoodsList('supersearch', {
+			back: 20,
+			keyword:pageParam.keyword,
+			min_id:sorts_data.min_id,
+			tb_p:sorts_data.tp_p,
+			sort:pageParam.sort,
+			is_coupon:1
+		}, function(ret, err) {
+
+		},more)
+	}
+
+	function doGoodlistSort() {
+		$('.ui-row.teamlist li').click(function() {
+			$('#div_goods_list').empty();
+			$(this).addClass('active').siblings().removeClass('active');
+				pageParam.sort = $(this).attr('data-sortby');
+			  sorts_data.min_id= 1;
+				sorts_data.tb_p=1;
+        dogetGoodsList();
+		})
+	}
+</script>

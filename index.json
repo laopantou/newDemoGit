@@ -1,0 +1,67 @@
+#联系QQ：669967681
+#联系QQ：669967681
+{
+    "name": "root",
+    "bgColor": "rgba(0,0,0,0.0)",
+    "delay":"300",
+    "tabBar": {
+       "animated":false,
+        "scrollEnabled":false,
+        "background":"#fcfcfc",
+        "shadow":"#EDEDED",
+        "selectedColor":"#f96a89",
+        "list": [
+            {
+                "text": "首页",
+                "iconPath": "widget://image/shouye.png",
+                "selectedIconPath": "widget://image/shouye1.png"
+            }, {
+                "text": "分类",
+                "iconPath": "widget://image/bp.png",
+                "selectedIconPath": "widget://image/bp1.png"
+            }, {
+                "text": "品牌",
+                "iconPath": "widget://image/mid.png",
+                "selectedIconPath": "widget://image/mid.png"
+            }, {
+                "text": "搜索",
+                "iconPath": "widget://image/tabbar-search-default.png",
+                "selectedIconPath": "widget://image/tabbar-search-active.png"
+            },{
+                "text": "9.9包邮",
+                "iconPath": "widget://image/tabbar-hd-default.png",
+                "selectedIconPath": "widget://image/tabbar-hd-active.png"
+            }
+
+        ],
+        "frames": [
+          {
+            "title": "首页",
+            "name": "index_win",
+            "url": "widget://html/home.html",
+            "overScrollMode":"always"
+        }, {
+            "title": "分类",
+            "name": "menu_win",
+            "url": "widget://html/menulist_win.html",
+            "overScrollMode":"always"
+        }, {
+            "title": "brand",
+            "name": "brand_win",
+            "url": "widget://html/brand.html"
+        }, {
+            "title": "全网搜索",
+            "name": "iindex_searchlist_win",
+            "url": "widget://html/index_searchlist.html",
+            "overScrollMode":"always"
+        },
+        {
+            "title": "9.9包邮",
+            "name": "9.9_win",
+            "url": "widget://html/coupon_head.html",
+            "overScrollMode":"always",
+            "pageParam":{marginBottom:54,url:'widget://html/9.9.html',name:'9.9块包邮',bounces:true,css:'aui-hide'}
+        }
+        ]
+    }
+}

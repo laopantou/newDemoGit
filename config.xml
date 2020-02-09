@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget id="A6078640650264" version="1.0.0">
+  <name>开源版</name>
+  <description>联盟</description>
+  <author email="419864334@qq.com" href="">Yellow Apple</author>
+  <content src="index.json"/>
+  <preference name="pageBounce" value="false"/>
+  <preference name="appBackground" value="rgba(255, 255, 255, 1)"/>
+  <preference name="windowBackground" value="rgba(0, 0, 0, 0.0)"/>
+  <preference name="frameBackgroundColor" value="rgba(0, 0, 0, 0.0)"/>
+  <preference name="hScrollBarEnabled" value="false"/>
+  <preference name="vScrollBarEnabled" value="false"/>
+  <preference name="autoLaunch" value="true"/>
+  <preference name="fullScreen" value="true"/>
+  <preference name="autoUpdate" value="true"/>
+  <preference name="smartUpdate" value="true"/>
+  <preference name="debug" value="false"/>
+  <preference name="statusBarAppearance" value="true"/>
+  <permission name="readPhoneState"/>
+  <permission name="camera"/>
+  <permission name="record"/>
+  <permission name="location"/>
+  <permission name="fileSystem"/>
+  <permission name="internet"/>
+  <permission name="bootCompleted"/>
+  <permission name="hardware"/>
+  <access origin="*"/>
+</widget>

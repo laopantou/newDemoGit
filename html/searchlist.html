@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>searchlist</title>
+	<link rel="stylesheet" type="text/css" href="../css/aui.css" />
+	<link rel="stylesheet" type="text/css" href="../css/common.css" />
+</head>
+<body>
+	<div class="s_header">
+		<div class="publictopSearchBox">
+			<div class="publictopSearchBox_1 ">
+				<div class="close_btn" tapmode onclick="api.closeWin();">
+					<img src="../image/back_01.png">
+				</div>
+				<div class="searchBox">
+					<div class="publicsearch top_search">
+						<form action="javascript:return true">
+							<img src="../image/search_icon.png" id="search_icon">
+							<img src="../image/close_btn.png" id="close_btn" style="display:none">
+							<input type="search" placeholder='请输入要搜索的关键字' confirm-type="search" class="fl publicFont_1 searchkey top_search_txt">
+							</input>
+						</form>
+						<div class='clearfix'></div>
+					</div>
+				</div>
+				<div class="fr rightsearchbutton">
+					<text class='searchForGoods'>
+						搜索
+					</text>
+				</div>
+				<div class='clearfix'></div>
+			</div>
+		</div>
+
+		<div class="search_list" id="search_sort_list">
+		</div>
+	</div>
+	<div class="search_stance"></div>
+	<div class="search_record">
+		<div class="search_top_bg">
+			<img src="../image/s_bg.png" style="display: table-cell;vertical-align: top;">
+		</div>
+		<div class="search_record_tile">
+			<img src="../image/hot.png" class="hot_left">
+			<span>热门标签</span>
+		</div>
+		<div class="search_record_list" id="keyword_list">
+		</div>
+	</div>
+	<div class="loading_main">
+		<img src="../image/loading_main.gif" />
+		<span>加载中,请稍后...</span>
+	</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script id="sorttab-tmpl" type="text/x-dot-template">
+	{{ for(var i=0, catlen=it.length; i
+	<catlen; i++) {}} <div data-value="{{=it[i].value}}" class="search_list_item {{=it[i].value}} {{? i==0}} active {{?}} ">{{=it[i].name}}</div>
+		{{ }}}
+</script>
+<script id="keyword-tmpl" type="text/x-dot-template">
+	{{ for(var i=0, catlen=it.length; i
+	<catlen; i++) {}} <div class="searchkeytext" data-keyword="{{=it[i].keyword}}" tapmode onclick="keyWordSearch();">{{=it[i].keyword}}</div>
+		{{ }}}
+</script>
+<script type="text/javascript">
+	var keyword = '';
+	var source_type = '';
+	apiready = function() {
+		initPage();
+		getHotKeyWords();
+		keyWordSearch();
+	};
+	function initPage() {
+		setDotTmpl('sorttab-tmpl', 'search_sort_list', Gtablist)
+		source_type = Gtablist[0].value;
+		switchtab();
+		$(".top_search_txt").focus(function() {
+			$(this).parent().children("#close_btn").show();
+			$("#search_icon").hide();
+		});
+		$(".top_search_txt").blur(function() {
+			if ($(this).val() == '') {
+				$(this).parent().children("#close_btn").hide();
+				$("#search_icon").show();
+			}
+		});
+		$("#close_btn").click(function() {
+			$(this).parent().find('.top_search_txt').val('');
+			$(this).hide();
+			$("#search_icon").show();
+		});
+	}
+	function keyWordSearch() {
+		$('.searchkeytext').click(function() {
+			keyword = $(this).attr('data-keyword');
+			openWinto('search_frame_win','widget://html/search_frame',{keyword:keyword,source_type:source_type,islogin:false});
+		});
+
+		$('.searchForGoods').click(function() {
+			keyword = $('.top_search_txt').val();
+			openWinto('search_frame_win','widget://html/search_frame',{keyword:keyword,source_type:source_type,islogin:false});
+		});
+
+		$(".top_search_txt").keydown(function(e) {
+			if (e.keyCode == 13) {
+				keyword = $('.top_search_txt').val();
+				openWinto('search_frame_win','widget://html/search_frame',{keyword:keyword,source_type:source_type,islogin:false});
+			}
+		});
+	}
+
+	function switchtab() {
+		$(".search_list_item").click(function() {
+			$(this).addClass('active').siblings().removeClass('active');
+			source_type = $(this).attr('data-value');
+		})
+	}
+	function getHotKeyWords() {
+			$(".loading_main").show();
+		postData(API_URL_GOODS, {
+			apiname: 'hot_key',
+		}, function(ret) {
+			if (ret.code == 1) {
+				setDotTmpl('keyword-tmpl', 'keyword_list', ret.data);
+					$(".loading_main").hide();
+			}
+		});
+	}
+</script>
+
+</html>

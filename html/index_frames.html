@@ -1,0 +1,318 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../css/aui.css" />
+	<link rel="stylesheet" type="text/css" href="../css/swiper.min.css" />
+	<style type="text/css">
+		.aui-tab {
+			position: fixed !important;
+			width: 100%;
+			z-index: 999;
+			top: 0;
+		}
+
+		.goods-item {
+			border: 1px solid #eee;
+			text-align: center;
+			padding: 3px;
+			padding-bottom: 8px;
+		}
+
+		.swiper-pagination-bullet {
+			width: 20px;
+			height: 3px;
+			border-radius: 0px;
+			background-color: rgba(0, 0, 0, 0.5);
+			margin: 0 0px !important;
+		}
+
+		.swiper-pagination-bullet-active {
+			width: 20px;
+			background-color: #FF1493;
+		}
+		.tmicon {
+			width: 10px;
+			height: 15px;
+		}
+
+		.swiper-container-top {
+			margin-top: 2.3rem;
+		}
+
+		img.icon {
+			display: block;
+			margin: 0 auto;
+			width: 60%;
+			border-radius: 50%;
+		}
+
+		.aui-col-5 {
+			/* Center slide text vertically */
+			position: relative;
+			float: left;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			-webkit-justify-content: center;
+			justify-content: center;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			-webkit-align-items: center;
+			align-items: center;
+			width: 20%;
+			border: 0px solid red;
+			padding-top: 3px !important;
+			padding-bottom: 10px !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="aui-tab" id="sorts">
+		<div class="aui-tab-item aui-active">今日热销</div>
+		<div class="aui-tab-item">最新上架</div>
+		<div class="aui-tab-item">优惠券额</div>
+		<div class="aui-tab-item">高佣金</div>
+	</div>
+	<section class="swiper-container-top">
+		<div class="swiper-wrapper" id="goodsbanner">
+
+		</div>
+	</section>
+	<section class="aui-content">
+		<div class="aui-grid">
+			<div class="aui-row aui-row-padded">
+				<div id="goodscates">
+
+				</div>
+			</div>
+		</div>
+	</section>
+	<div class="aui-content" style="margin-top:0.2rem">
+		<div class="aui-card-list">
+			<div class="aui-card-list-content-padded aui-padded-0">
+				<div class="aui-row aui-row-padded" id="div_goods_list">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--加载loading-->
+	<div class="index_loading">
+		<img src="../image/index_loading.gif" />
+		<span>加载中,请稍后...</span>
+	</div>
+	<div class="temporarily_data" style="display:none;">
+		<img src="../image/no_date.png" />
+	</div>
+	<!--返回顶部-->
+	<div class="gotoback" onclick="gotoback()" id="gotoback">
+		<img src="../image/gotoback.png">
+	</div>
+	<script id="tmpl_goods_list" type="text/x-dot-template">
+		{{? it.length>0}} {{for (var i=0 ;i
+		<it.length; i++) {}} <div class="aui-col-xs-6" tapmode onclick="openWinto('detail_win','./good_detail_win',{gooditem:'{{!JSON.stringify(it[i])}}'})">
+			<div class="goods-item">
+				<img id="img_pics" onerror="this.src='../image/load-img.png'" src="../image/load-img.png" data-echo="{{=it[i].itempic}}_310x310.jpg" width="60px" height="210px" max-height="21 0px">
+				<div style="background-color:#FFEFD5;color:#FFF" class=" aui-font-size-14  aui-bg-tag-quan-{{? i%2==0}}0{{??}}1{{?}} "><label class=" aui-iconfont   aui-padded-r-5 aui-icon-{{? it[i].shoptype=='C'}}taobao aui-text-warning{{??}}tianmao aui-text-danger{{?}}"></label>今日销售{{=it[i].todaysale}}单</div>
+				<div class="aui-ellipsis-1">{{? it[i].shoptype=="B"}}<label class="tm_font_style">天猫{{??}}<label class="tb_font_style">淘宝{{?}}</label>{{=it[i].itemtitle}}</div>
+				<div style="margin-top: 3px;font-size: 10px;">
+					<label class="aui-padded-l-5 aui-text-left aui-pull-left"><del>￥{{=it[i].itemprice}}元</del></label>
+					<label class="aui-padded-r-5 aui-text-right aui-pull-right">已售{{=it[i].itemsale}}</label>
+				</div>
+				<div class="aui-clearfix"></div>
+				<div style="margin-top: 3px;">
+					<span class="aui-pull-left aui-padded-l-5"><label class="aui-label aui-label-danger aui-bg-tag-quan">券{{=it[i].couponmoney}}元</label></span>
+					<span class="aui-pull-right aui-padded-r-5"><label class="aui-label aui-label-success aui-bg-tag-money">￥{{= it[i].itemendprice}}元</label></span>
+				</div>
+				<div class="aui-clearfix"></div>
+			</div>
+			<div class="aui-clearfix"></div>
+			</div>
+
+			{{ } }}
+			{{?}}
+	</script>
+	<script id="goodsbannertmpl" type="text/x-dot-template">
+		<div class="swiper-container" id="pic-swiper">
+			<div class="swiper-wrapper">
+				{{for (var i=0;i
+				<it.length;i++) { }} {{? it[i].typeid==1}} <div class="swiper-slide" tapmode onclick="openindexfenleiurl('{{=it[i].title}}','{{=it[i].url}}')"><img src='{{=it[i].pic}}' height="150px" width="100%" /></div>
+			{{?? it[i].typeid==2}}
+			<div class="swiper-slide" tapmode onclick="openindexfenleiurl('{{=it[i].title}}','{{=it[i].url}}')"><img src='{{=it[i].pic}}' height="150px" width="100%" /></div>
+			{{?}} {{ } }}
+		</div>
+		<div class="swiper-pagination"></div>
+		</div>
+	</script>
+	<script id="goodscatestmpl" type="text/x-dot-template">
+		<div class="swiper-container" id="cate-swiper">
+			<div class="swiper-wrapper">
+				{{for (var i=0;i
+				<it.length;i++) { }} <div class="aui-col-5 swiper-slide " tapmode onclick="openkeywords_win('{{=it[i].title}}')">
+					<img src="{{=it[i].thumb}}" class="icon" onerror="this.src='../image/taobao.png'">
+					<div class="aui-font-size-12">{{=it[i].title}}</div>
+			</div>
+			{{ } }}
+		</div>
+		<div class="swiper-pagination"></div>
+		</div>
+	</script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/aui-tab.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script type="text/javascript" src="../script/swiper.min.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript">
+	apiready = function() {
+		echo.init({
+			offset: 0, // 指定距离视窗上下左右位置图片预加载 Number|String Default: 0
+			throttle: 250, // 延迟加载  Number|String	Default: 250
+			unload: true,
+		});
+		//api.refreshHeaderLoading();
+		api.parseTapmode();
+		sorts_data.cid = api.pageParam.cid;
+		sorts_data.min_id = 1;
+		sorts_data.nav = 3;
+		sorts_data.sort = 9;
+		getGoodsBanner(sorts_data.cid);
+		getGoodsList('itemlist',sorts_data);
+		getSortGoods('sorts',function(index){
+			sorts_data.min_id = 1;
+			showProgress();
+			switch (index) {
+				case 1:
+					sorts_data.sort=4
+					break;
+					case 2:
+					sorts_data.sort=0;
+					break;
+					case 3:
+					sorts_data.sort=3;
+					break;
+					case 4:
+					sorts_data.sort=5;
+				default:
+			}
+			getGoodsList('itemlist',sorts_data,function(){
+				hideProgress();
+			});
+		});
+		getMoreGoods(function(){
+			getGoodsList('itemlist',sorts_data,'cb',true);
+		});
+		pullDown(function() {
+			sorts_data.min_id = 1; //第一页不然每刷新就是下一页内容
+			getGoodsList('itemlist',sorts_data);
+			getGoodsBanner(sorts_data.cid);
+		});
+		bodySrollChangeHeader();
+		setAppNotSroll();
+	};
+
+	function openkeywords_win(keywords) {
+		openWinto('keywords_win', 'coupon_head', {
+			cid: sorts_data.cid,
+			name: keywords,
+			keywords: keywords,
+			url: 'widget://html/keywords_goodslist_frm.html'
+		});
+	}
+	function getGoodsBanner(cid) {
+		postData(API_URL_FUN, {
+			apiname: 'get_goods_banner',
+			cid: cid
+		}, function(ret) {
+			if (ret.code > 0) {
+				switch (ret.code) {
+					case 1:
+						setDotTmpl('goodscatestmpl', 'goodscates', ret.catedata);
+						setDotTmpl('goodsbannertmpl', 'goodsbanner', ret.picprtdata);
+						window.setTimeout(function() {
+							init_slide('cate-swiper');
+							init_slide('pic-swiper');
+						}, 500);
+						break;
+					case 2:
+						setDotTmpl('goodsbannertmpl', 'goodsbanner', ret.picprtdata);
+						window.setTimeout(function() {
+							init_slide('pic-swiper');
+						}, 500);
+						break;
+					case 3:
+						setDotTmpl('goodscatestmpl', 'goodscates', ret.catedata);
+						window.setTimeout(function() {
+							init_slide('cate-swiper');
+						}, 500);
+						break;
+				}
+			}
+		})
+	}
+
+	function init_slide(slide) {
+		slide = slide || 'pic-swiper';
+		if (slide == 'cate-swiper') {
+			var swiper_parm = {
+				slidesPerView: 4,
+				slidesPerColumn: 2,
+				spaceBetween: 0,
+				pagination: {
+					el: '.swiper-pagination',
+				},
+				on: {
+					touchStart: function(event) {
+						api.setFrameGroupAttr({
+							name: 'index_frame_list',
+							scrollEnabled: false
+						});
+					},
+					touchEnd: function(event) {
+						api.setFrameGroupAttr({
+							name: 'index_frame_list',
+							scrollEnabled: true
+						});
+					}
+				},
+			};
+		} else {
+			var swiper_parm = {
+				loop: true, // 循环模式选项
+				autoplay: true,
+				lazy: true,
+				pagination: {
+					el: '.swiper-pagination',
+				},
+				on: {
+					touchStart: function(event) {
+						api.setFrameGroupAttr({
+							name: 'index_frame_list',
+							scrollEnabled: false
+						});
+					},
+					touchEnd: function(event) {
+						api.setFrameGroupAttr({
+							name: 'index_frame_list',
+							scrollEnabled: true
+						});
+					}
+				},
+			};
+		}
+
+		slide = new Swiper('#' + slide, swiper_parm);
+	}
+</script>
+
+</html>

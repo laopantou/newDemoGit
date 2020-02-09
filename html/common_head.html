@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>common_head</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+</head>
+<body>
+	<header class="aui-bar aui-bar-nav  aui-bg-tag-money" id='aui-header'>
+			<a class="aui-pull-left aui-btn" tapmode onclick="api.closeWin();"> <span class="aui-iconfont aui-icon-left"></span> </a>
+			<div class="aui-title" id="name"></div>
+			<a class="aui-btn aui-pull-right" tapmode onclick="api.closeWin();">
+    <span class="aui-iconfont aui-icon-close"></span>
+    </a>
+	</header>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+	apiready = function(){
+		  api.parseTapmode();
+			$api.text($api.byId('name'), api.pageParam.data.name);
+		  var header = $api.byId('aui-header');
+	    $api.fixStatusBar(header);
+	    var headerPos = $api.offset(header).h;
+			if(api.pageParam.data.name){
+      openWinX5(headerPos,api.pageParam.data.url);
+		}else{
+			openUrlX5(api.pageParam.data.url);
+		}
+	};
+</script>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>9.9</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <style>
+        .goods-item {
+            border: 1px solid #eee;
+            text-align: center;
+            padding: 3px;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="aui-content">
+        <div class="aui-card-list">
+            <div class="aui-card-list-content-padded aui-padded-0">
+                <div class="aui-row aui-row-padded" id="div_goods_list">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--加载loading-->
+    <div class="index_loading">
+        <img src="../image/index_loading.gif" />
+        <span>加载中,请稍后...</span>
+    </div>
+    <div class="loading_main">
+        <img src="../image/loading_main.gif" />
+        <span>加载中,请稍后...</span>
+    </div>
+
+    <div class="temporarily_data" style="display:none;">
+        <img src="../image/no_date.png" />
+    </div>
+    <script id="tmpl_goods_list" type="text/x-dot-template">
+        {{? it.length>0}} {{for (var i=0 ;i
+        <it.length; i++) {}} <div class="aui-col-xs-6" tapmode onclick="openWinto('detail_win','./good_detail_win',{gooditem:'{{!JSON.stringify(it[i])}}'})">
+            <div class="goods-item">
+                <img id="img_pics" onerror="this.src='../image/load-img.png'" src="../image/load-img.png" data-echo="{{=it[i].itempic}}_310x310.jpg" width="60px" height="210px" max-height="21 0px">
+                <div style="background-color:#FFEFD5;color:#FFF" class=" aui-font-size-14  aui-bg-tag-quan-{{? i%2==0}}0{{??}}1{{?}} "><label class=" aui-iconfont   aui-padded-r-5 aui-icon-{{? it[i].shoptype=='C'}}taobao aui-text-warning{{??}}tianmao aui-text-danger{{?}}"></label>今日销售{{=it[i].todaysale}}单</div>
+                <div class="aui-ellipsis-1">{{=it[i].itemtitle}}</div>
+                <div style="margin-top: 3px;font-size: 10px;">
+                    <label class="aui-padded-l-5 aui-text-left aui-pull-left"><del>￥{{=it[i].itemprice}}元</del></label>
+                    <label class="aui-padded-r-5 aui-text-right aui-pull-right">已售{{=it[i].itemsale}}</label>
+                </div>
+                <div class="aui-clearfix"></div>
+                <div style="margin-top: 3px;">
+                    <span class="aui-pull-left aui-padded-l-5"><label class="aui-label aui-label-danger aui-bg-tag-quan">券{{=it[i].couponmoney}}元</label></span>
+                    <span class="aui-pull-right aui-padded-r-5"><label class="aui-label aui-label-success aui-bg-tag-money">￥{{= it[i].itemendprice}}元</label></span>
+                </div>
+                <div class="aui-clearfix"></div>
+            </div>
+            <div class="aui-clearfix"></div>
+            </div>
+            {{ } }} {{?}}
+    </script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.parseTapmode();
+        var headers = $api.byId('aui-header');
+        $api.fixStatusBar(headers);
+        echo.init();
+        getGoodsList('column', {
+            type: 2,
+            back: 20,
+            sort: 11
+        });
+        getMoreGoods(function() {
+            getGoodsList('column', {
+                type: 2,
+                back: 20,
+                sort: 11,
+                min_id: sorts_data.min_id
+            }, 'cb', true);
+        });
+    };
+</script>
+
+</html>

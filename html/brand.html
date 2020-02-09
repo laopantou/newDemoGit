@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>brand</title>
+      <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+      <style>
+      .aui-bar-nav{
+        background-color: rgba(0,0,0,0.0);
+        color: #333;
+      }
+      .topfixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+       }
+       .aui-bg-737373{
+       background-color: #737373;
+
+       }
+      .aui-title span{
+        margin-left: 10px;
+      }
+      .aui-title .active{
+        border-bottom: 3px solid #CD2626;
+      }
+      .aui-div-bg{
+        height:200px;
+        background-image: url('../image/brand.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-color: rgba(0, 0, 0, 0.0);
+      }
+      .aui-div-radius{
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        margin-top: -40px;
+        border: 5px solid #fff;
+        height: 400px;
+        background-color: rgba(0, 0, 0, 0.0);
+      }
+      </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav  topfixed" id="aui-header">
+      <a class="aui-btn aui-pull-left">
+          <span id="aui-icon-left" class="aui-iconfont"></span>
+      </a>
+        <div class="aui-title" id="aui-title" style="display:none">品牌</div>
+    </header>
+    <section id="body">
+      <div class="aui-div-bg" ></div>
+      <div class="aui-div-radius" ></div>
+    </section>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        api.parseTapmode();
+        var header = $api.byId('aui-header');
+        $api.fixStatusBar(header);
+        var menu_cate=[
+          '母婴',
+          '女装',
+          '食品',
+          '居家',
+          '美妆',
+          '男装',
+          '内衣',
+          '箱饰',
+          '鞋靴',
+          '宠物',
+          '数电',
+          '车体'
+        ];
+        var catelist=[];
+        for(var i=0;i<menu_cate.length;i++){
+          catelist[i]={
+            title:menu_cate[i],
+            bg:'rgba(0,0,0,0.0)',
+            bgSelected:'widget://image/cate_bg.png'
+          };
+        }
+        setNavMenu('brand',160,catelist);
+        openG();
+        window.onscroll=function(){
+          var toph=document.documentElement.scrollTop || document.body.scrollTop;
+        if(toph>1){
+       $api.css($api.byId('aui-header'),'color:#333 !important;background-color:#fff;opacity:'+toph*0.01);
+       $api.css($api.byId('aui-title'),'color:#333 !important;display:block;opacity:'+toph*0.01);
+       $api.css($api.byId('aui-icon-left'),'color:#333;background-color:rgba(0,0,0,0.0);border:none');
+      }else{
+       $api.css($api.byId('aui-header'),'background-color:rgba(0,0,0,0.0);opacity:1');
+       $api.css($api.byId('aui-title'),'display:none');
+       $api.css($api.byId('aui-icon-left'),'color:#fff;background-color:#737373;width:28px;height:28px;border-radius:50%;-webkit-border-radius:50%;border:1px solid #666');
+      }
+
+        }
+
+
+      };
+      function openG(){
+        var brand_frame_list=[];
+              for(var i=1;i<=12;i++){
+              brand_frame_list[i]={
+              name:'brand_frame_'+i,
+              url:'./brand_frm_group.html',
+              pageParam:{brandcat:i},
+              bounces:true,
+              allowEdit:true,
+              }
+              }
+        api.openFrameGroup({
+          name : 'brand_frame_list',
+          scrollEnabled : true,
+          rect : {
+            w : 'auto',
+            h : api.winHeight-200,
+            marginTop:200,
+          },
+          fixedOn:'ui_layout',
+          index : 0,
+          preload :5,
+          frames :brand_frame_list
+        }, function(ret, err) {
+          setNavMenuSelected('brand',ret.index);
+          });
+      }
+  </script>
+  </html>

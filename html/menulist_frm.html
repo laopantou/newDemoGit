@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+	<style>
+        .aui-card-list {
+            margin-bottom: 0;
+        }
+        .aui-content img{
+          width: 70% !important;
+          border: 1px solid #FFF0F5;
+          border-radius: 50%;
+          background-color: #FFF0F5;
+          text-align: center;
+          margin: 0 auto;
+        }
+        .aui-label{
+          display: block !important;
+          position: relative;
+          color: #fff;
+          font-size:16px;
+          line-height: 18px;
+          width: 100px;
+        }
+
+        .aui-content .au-row{
+          background-color: rgba(0, 0, 0, 0.0) !important;
+        }
+        .makeprofit.wxlogin .make_info {
+
+          position: absolute;
+          position: fixed;
+          top: 18%;
+          right: 0px;
+          padding: 0.3rem 0.5rem;
+
+          border-radius: 2.5rem 0 0 2.5rem;
+          background: -webkit-linear-gradient(left, #5f41f8, #ae63fb);
+        }
+        .makeprofit.wxlogin .make_info_1 {
+
+          position: absolute;
+          position: fixed;
+          top: 30%;
+          right: 0px;
+          padding: 0.3rem 0.5rem;
+          border-radius: 2.5rem 0 0 2.5rem;
+          background: -webkit-linear-gradient(left,#FA5182,#FA895C);
+        }
+         .bindtext{
+          color:#fff;
+          font-size: 0.875rem;
+        }
+	</style>
+</head>
+<body>
+    <section class="aui-content aui-padded-l-5 aui-padded-r-10 aui-padded-t-5">
+        <div class="aui-row aui-row-padded" id="catelist">
+
+
+        </div>
+    </section>
+    <div class="loading_main">
+      <img src="../image/loading_main.gif" />
+      <span>加载中,请稍后...</span>
+    </div>
+    <script id="catelisttmpl" type="text/x-dot-template">
+    {{? it.length>0}}
+     {{for (var i=0; i<it.length; i++) {}}
+     <div class="aui-padded-5 aui-text-center aui-clearfix"><h4 class="aui-bg-tag-quan aui-label aui-margin-0">{{=it[i].next_name}}</h4></div>
+     {{for (var j=0;j<it[i]['info'].length;j++) {}}
+    <div class="aui-col-xs-4" tapmode onclick="openkeywords_win('{{=it[i]['info'][j].son_name}}')">
+        <div class="aui-card-list">
+            <div class="aui-card-list-content aui-margin-0 ">
+                <img src="../image/taobao.png" data-echo="{{=it[i]['info'][j].imgurl}}.png" class="imagecache" onerror="this.src='../image/taobao.png'">
+            <h5 class="aui-font-size-14 aui-margin-0 aui-text-center aui-ellipsis-1 ">{{=it[i]['info'][j].son_name}}</h5>
+            </div>
+        </div>
+    </div>
+    {{ } }}
+    {{ } }}
+    {{?}}
+    </script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script type="text/javascript">
+  $(".loading_main").show();
+    var menu_cid;
+    apiready = function(){
+      echo.init({
+        offset: 0, // 指定距离视窗上下左右位置图片预加载 Number|String Default: 0
+        throttle: 10, // 延迟加载  Number|String	Default: 250
+        unload: true,
+      });
+        menu_cid=api.pageParam.cid;
+        $(document).ready(function () {
+          $(".loading_main").hide();
+        });
+        api.parseTapmode();
+       var menulist=$api.getStorage("menulist");
+       //console.log(menulist);
+       setDotTmpl("catelisttmpl","catelist",menulist[menu_cid]['data']);
+       echo.render();
+       imageCache($('.imagecache'));
+        api.addEventListener({
+            name:'scrolltobottom',
+            extra:{
+                threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function(ret, err){
+          api.setFrameGroupIndex({
+              name: 'menulist_frame_list',
+              index: menu_cid,
+              scroll: false
+          });
+        });
+        pullDown(function(){
+         if(menu_cid!=1){
+          api.setFrameGroupIndex({
+              name: 'menulist_frame_list',
+              index: menu_cid-2,
+              scroll: false
+          });
+          }
+        },true)
+    };
+function openkeywords_win(keywords){
+  openWinto('keywords_win','coupon_head',{cid:menu_cid,name:keywords,keywords:keywords,url:'widget://html/keywords_goodslist_frm.html'});
+}
+
+</script>
+</html>
